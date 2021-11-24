@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<launch>
+  <!-- Octomap resolution -->
+  <param name="resolution" value="0.15" />
+  <!-- Map merging timer (in seconds) -->
+  <param name="map_merge_timer" value="600" />
+  <!-- Publish self Octomap -->
+  <param name="pub_self_map" value="true" />
+  <!-- Self Octomap topic name -->
+  <param name="self_map_topic" value="H01_map" />
+  <!-- Publish self merged map topic -->
+  <param name="pub_self_merged_map" value="true" />
+  <!-- Self merged map topic name -->
+  <param name="self_merged_map_topic" value="H01_merged_map" />
+  <!-- Publish neighbor maps -->
+  <param name="pub_neighbor_maps" value="false" />
+  <!-- Neighbor maps topic name -->
+  <param name="neighbor_map_topic" value="neighbor_maps" />
+  <!-- Publish transformed temp tree -->
+  <param name="pub_tf_temp_tree" value="true" />
+  <param name="tf_temp_tree_topic" value="tf_temp_tree" />
+  <!-- Publish self map point cloud -->
+  <param name="pub_self_map_PC" value="true" />
+  <!-- Self map point cloud topic name -->
+  <param name="self_map_PC_topic" value="map_PC" />
+  <!-- Publish temp_tree point cloud -->
+  <param name="pub_temp_tree_PC" value="true" />
+  <!-- temp_tree point cloud topic name -->
+  <param name="temp_tree_PC_topic" value="temp_tree_PC" />
+  <!-- Publish transformed temp_tree point cloud -->
+  <param name="pub_tf_temp_tree_PC" value="true" />
+  <!-- Transformed temp_tree point cloud topic name -->
+  <param name="tf_temp_tree_PC_topic" value="tf_temp_tree_PC" />
+  <!-- Publish intersecting BBox Points -->
+  <param name="pub_bbox_intersect_PCs" value="true" />
+  <!-- Source BBox Intersection Points -->
+  <param name="src_bbox_PC_topic" value="src_bbox_PC" />
+  <!-- Target BBox Intersection Points -->
+  <param name="trg_bbox_PC_topic" value="trg_bbox_PC" />
+  <!-- Topic containing self Octomap -->
+  <!-- <param name="diff_map_in" value="/H01/octomap_binary" /> -->
+  <!-- <param name="diff_map_in" value="/Base/neighbors/H01/map" /> -->
+  <param name="diff_map_in" value="/H01/merged_map" />
+  <!-- Topic containing neighbor maps -->
+  <param name="neighbor_diffs_in" value="/H01/neighbor_maps" />
+  <!-- <param name="neighbor_diffs_in" value="/Base/neighbor_maps" /> -->
+
+  <rosparam command="load" file="$(find octomap_merging)/config/icp_param_config.yaml" />
+
+  <node name="octomap_merging" pkg="octomap_merging" type="octomap_merging_node" output="screen"> </node>
+  
+  <!-- Open RViz with config file -->
+  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find octomap_merging)/rviz/H01_rviz_config.rviz"> </node> -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find octomap_merging)/rviz/base_station_config.rviz"> </node>
+</launch>

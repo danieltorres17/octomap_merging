@@ -1,0 +1,15 @@
+<launch>
+
+  <include file="$(find marble_common)/launch/common/liosam.launch" />
+  
+  <arg name="out_dir" default="/home/daniel/example_ws/src/husky_driver/bags" />
+  <arg name="out_file" default="husky_edgar_rough04_odom_and_pc.bag" />
+
+  <node pkg="rosbag" type="record" name="H01_outputs" args="record -o $(arg out_dir)/$(arg out_file)
+    /H01/horiz/os_cloud_node/points
+    /lio_sam/mapping/odometry
+    /tf
+    /tf_static" />
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find octomap_merging)/rviz/H01_pc_config.rviz" > </node>
+</launch>
