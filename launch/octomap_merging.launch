@@ -3,7 +3,7 @@
   <!-- Octomap resolution -->
   <param name="resolution" value="0.15" />
   <!-- Map merging timer (in seconds) -->
-  <param name="map_merge_timer" value="600" />
+  <param name="map_merge_timer" value="300" />
   <!-- Publish self Octomap -->
   <param name="pub_self_map" value="true" />
   <!-- Self Octomap topic name -->
@@ -13,9 +13,11 @@
   <!-- Self merged map topic name -->
   <param name="self_merged_map_topic" value="H01_merged_map" />
   <!-- Publish neighbor maps -->
-  <param name="pub_neighbor_maps" value="false" />
+  <param name="pub_neighbor_maps" value="true" />
   <!-- Neighbor maps topic name -->
   <param name="neighbor_map_topic" value="neighbor_maps" />
+  <!-- Neighbor maps publishing timer -->
+  <param name="neighbor_map_pub_timer" value="5" />
   <!-- Publish transformed temp tree -->
   <param name="pub_tf_temp_tree" value="true" />
   <param name="tf_temp_tree_topic" value="tf_temp_tree" />
@@ -39,11 +41,11 @@
   <param name="trg_bbox_PC_topic" value="trg_bbox_PC" />
   <!-- Topic containing self Octomap -->
   <!-- <param name="diff_map_in" value="/H01/octomap_binary" /> -->
-  <!-- <param name="diff_map_in" value="/Base/neighbors/H01/map" /> -->
-  <param name="diff_map_in" value="/H01/merged_map" />
+  <param name="diff_map_in" value="/Base/neighbors/H01/map" />
+  <!-- <param name="diff_map_in" value="/H01/merged_map" /> -->
   <!-- Topic containing neighbor maps -->
-  <param name="neighbor_diffs_in" value="/H01/neighbor_maps" />
-  <!-- <param name="neighbor_diffs_in" value="/Base/neighbor_maps" /> -->
+  <!-- <param name="neighbor_diffs_in" value="/H01/neighbor_maps" /> -->
+  <param name="neighbor_diffs_in" value="/Base/neighbor_maps" />
 
   <rosparam command="load" file="$(find octomap_merging)/config/icp_param_config.yaml" />
 

@@ -23,7 +23,6 @@ add_definitions(-DOCTOMAP_NODEBUGOUT)
 
 include_directories(
   include
-  # Go-ICP
   ${catkin_INCLUDE_DIRS}
   ${OCTOMAP_INCLUDE_DIRS}
 )
@@ -42,7 +41,8 @@ generate_messages(
 catkin_package(
   INCLUDE_DIRS include ${catkin_INCLUDE_DIRS}
   LIBRARIES ${PROJECT_NAME}
-  CATKIN_DEPENDS marble_mapping message_runtime
+  # CATKIN_DEPENDS marble_mapping message_runtime
+  CATKIN_DEPENDS message_runtime
 )
 
 set(LINK_LIBS
@@ -50,26 +50,12 @@ set(LINK_LIBS
   ${catkin_LIBRARIES}
 )
 
-# set(SRC_GO_ICP
-#   Go-ICP/ConfigMap.cpp
-#   Go-ICP/jly_3ddt.cpp
-#   Go-ICP/jly_goicp.cpp
-#   Go-ICP/jly_icp3d.hpp
-#   Go-ICP/jly_sorting.hpp
-#   Go-ICP/matrix.cpp
-#   Go-ICP/nanoflann.hpp
-#   Go-ICP/StringTokenizer.cpp
-# )
-
-add_library(icp_alignment src/icp_alignment.cpp)
-target_link_libraries(icp_alignment ${catkin_LIBRARIES})
-
 add_library(octomap_merging src/octomap_merging.cpp)
 target_link_libraries(octomap_merging ${catkin_LIBRARIES} ${LINK_LIBS})
 add_dependencies(octomap_merging ${catkin_EXPORTED_TARGETS})
 
 add_executable(octomap_merging_node src/octomap_merging_node.cpp)
-target_link_libraries(octomap_merging_node octomap_merging icp_alignment ${catkin_LIBRARIES})
+target_link_libraries(octomap_merging_node octomap_merging ${catkin_LIBRARIES})
 
 install(
   TARGETS ${PROJECT_NAME}

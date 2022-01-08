@@ -23,7 +23,7 @@
 #include <pcl/registration/transformation_estimation_svd.h>
 
 #include <pcl/surface/organized_fast_mesh.h>
-#include <pcl/features/from_meshes.h>
+// #include <pcl/features/from_meshes.h>
 
 #include <pcl/registration/transforms.h>
 #include <pcl_conversions/pcl_conversions.h>
@@ -45,6 +45,9 @@
 #pragma GCC diagnostic pop
 
 #include <Eigen/Dense>
+#include <Eigen/Geometry>
+
+#include <boost/thread.hpp>
 
 #include <iostream>
 #include <string>
@@ -59,32 +62,27 @@ typedef pcl::PointXYZ pclPoint;
 typedef pcl::PointCloud<pclPoint> pointCloud;
 typedef octomap::RoughOcTree RoughOcTreeT;
 
-typedef pcl::PointNormal PointNT;
-typedef pcl::PointCloud<PointNT> PointCloudT;
-typedef pcl::FPFHSignature33 FeatureT;
-typedef pcl::FPFHEstimationOMP<PointNT, PointNT, FeatureT> FeatureEstimationT;
-typedef pcl::PointCloud<FeatureT> FeatureCloudT;
-
 class OctomapMerging {
 public:
-    OctomapMerging(ros::NodeHandle& nodehandle);
+    OctomapMerging(ros::NodeHandle& nodehandle, ros::NodeHandle& private_nodehandle);
     ~OctomapMerging();
 
 private:
     void myMapCallback(const octomap_msgs::OctomapConstPtr& msg);
     void myDiffsCallback(const octomap_merging::OctomapArrayConstPtr& msg);
     void neighborDiffsCallback(const octomap_merging::OctomapNeighborsConstPtr& msg);
-    pointCloud::Ptr statOutlierRemoval(pointCloud& inputCloud);
-    void tree2PointCloud(RoughOcTreeT* tree, pointCloud& cloud);
+    void tree2PointCloud(const RoughOcTreeT* tree, pointCloud& cloud);
+    void updateNeighborMaps();
     void mergeNeighbors(const ros::TimerEvent& event);
-    void mergeMaps();
-    Eigen::Matrix4f findTransform(Eigen::Matrix4f& tfEst, Eigen::Matrix4f& prev_tf);
-    void transformTree(Eigen::Matrix4f& tf);
-    Eigen::Matrix4f getICPTransform(pointCloud& src, pointCloud& trg, Eigen::Matrix4f& tfEst);
-    Eigen::Matrix4f getGICPTransform(pointCloud &src, pointCloud& trg, Eigen::Matrix4f& tfEst);
+    Eigen::Matrix4f alignMap(const RoughOcTreeT* tree);
+    void mergeMap(const RoughOcTreeT* tree);
+    void transformMap(RoughOcTreeT* tree, const Eigen::Matrix4f& tf);
+    Eigen::Matrix4f getGICPTransform(pointCloud &src, pointCloud& trg);
     double getSign(double x) { if (x < 0) return -1; else return 1; }
+    void publishNeighborMaps(const ros::TimerEvent& event);
 
     ros::NodeHandle nh;
+    ros::NodeHandle pnh;
     ros::Subscriber myDiffsSub;
     ros::Subscriber neighborDiffsSub;
     ros::Publisher myMapPub;
@@ -100,16 +98,16 @@ private:
     tf2_ros::Buffer tfBuffer;
     ros::Timer diff_timer;
     ros::Timer merge_timer;
+    ros::Timer neighbor_map_pub;
     boost::mutex m_mtx;
 
     octomap_msgs::Octomap mapDiffs;
     octomap_merging::OctomapArray selfDiffs;
     octomap_merging::OctomapNeighbors neighborDiffs;
 
-    RoughOcTreeT* m_octree;
-    RoughOcTreeT* m_diff_tree;
+    RoughOcTreeT* m_octree; // self map
     RoughOcTreeT* m_merged_tree; 
-    RoughOcTreeT* temp_tree; // for neighbor diff map concatenation
+    RoughOcTreeT* temp_tree;
 
     // octomap parameters
     std::string m_mapTopic;
@@ -138,13 +136,11 @@ private:
     // outlier filter, downsampling and GICP parameters
     int meanK;
     double stdDevMulThresh;
-    double radiusSearchScale;
-    int minNumberNeighbors;
     int leafScale;
-    int gicpIterations;
-    int gicpOptimizerIterations;
-    int gicpMaxCorrespDistScale;
-    double gicpTFEpsScale;
+    int icpIterations;
+    int icpOptimizerIterations;
+    int icpMaxCorrespDistScale;
+    double icpTFEpsScale;
     int ransacNumIterations;
     double ransacOutlierRejecThresh;
     double euclideanFitnessEps;
@@ -170,11 +166,16 @@ private:
     int m_mapMergeTimerDuration;
     int m_numDiffMap;
     std::vector<std::string> neighbors_list{"H02", "D01", "D02"};
-    std::map<std::string, Eigen::Matrix4f> last_tf;
+    std::map<std::string, Eigen::Matrix4f> neighbor_tf;
     std::map<char, std::string> agent_map;
     std::map<std::string, bool> neighbor_updated;
     std::map<std::string, RoughOcTreeT*> neighbor_maps;
+    std::map<std::string, ros::Publisher> neighbor_pubs;
+    std::map<std::string, bool> neighbor_aligned;
     ros::Timer diff_merge_timer;
+    ros::Timer pub_neighbor_maps_timer;
+    bool m_neighborMapsMerged = false;
+    int m_neighborMapPubTimer;
 };
 
 
