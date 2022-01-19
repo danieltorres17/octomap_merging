@@ -12,6 +12,6 @@ The misalignment is most noticeable when looking at the neon green map section.
 <br/>
 Once it's corrected, it's actual useful for any multi-robot stuff you want to do.
 
-To run the package, configure the statistical outlier filter and ICP settings through the icp_param_config.yaml file and change the name of the diff map input topics in the octomap_merging.launch file. 
+To run the package, configure the statistical outlier filter and ICP settings through the icp_param_config.yaml file and change the name of the diff map input topics in the octomap_merging.launch file. I'll write more detailed instructions soon!
 <br/><br/>
 I'm still working on implementing these changes into the Marble Mapping package. Grad school is hard but I'll get back to this eventually. 
