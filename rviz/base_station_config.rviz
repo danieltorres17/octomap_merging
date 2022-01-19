@@ -5,7 +5,6 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /TF1/Frames1
       Splitter Ratio: 0.5
     Tree Height: 1084
   - Class: rviz/Selection
@@ -129,12 +128,54 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        D01_base/base_link:
+        H01/base_link:
+          Value: false
+        H01/cam_back_link:
+          Value: false
+        H01/cam_front_link:
+          Value: false
+        H01/cam_left_link:
+          Value: false
+        H01/cam_right_link:
+          Value: false
+        H01/front_left_wheel_link:
+          Value: false
+        H01/front_right_wheel_link:
+          Value: false
+        H01/horiz_ouster_imu:
+          Value: false
+        H01/horiz_ouster_link:
+          Value: false
+        H01/horiz_ouster_sensor:
+          Value: false
+        H01/imu_link:
+          Value: false
+        H01/imu_viz_link:
           Value: true
-        H01_base/base_link:
+        H01/map:
           Value: true
-        H02_base/base_link:
-          Value: true
+        H01/odom:
+          Value: false
+        H01/pico_flexx_left_optical_frame:
+          Value: false
+        H01/pico_flexx_right_optical_frame:
+          Value: false
+        H01/picoflexx_mount_link:
+          Value: false
+        H01/planning_link:
+          Value: false
+        H01/rear_left_wheel_link:
+          Value: false
+        H01/rear_right_wheel_link:
+          Value: false
+        H01/rplidar_safety_link:
+          Value: false
+        H01/vert_ouster_sensor:
+          Value: false
+        laser:
+          Value: false
+        lidar_link:
+          Value: false
         world:
           Value: true
       Marker Alpha: 1
@@ -145,12 +186,48 @@ Visualization Manager:
       Show Names: true
       Tree:
         world:
-          D01_base/base_link:
-            {}
-          H01_base/base_link:
-            {}
-          H02_base/base_link:
-            {}
+          H01/map:
+            H01/odom:
+              H01/imu_viz_link:
+                H01/base_link:
+                  H01/front_left_wheel_link:
+                    {}
+                  H01/front_right_wheel_link:
+                    {}
+                  H01/planning_link:
+                    {}
+                  H01/rear_left_wheel_link:
+                    {}
+                  H01/rear_right_wheel_link:
+                    {}
+                  H01/rplidar_safety_link:
+                    {}
+                  laser:
+                    {}
+                H01/cam_back_link:
+                  {}
+                H01/cam_front_link:
+                  {}
+                H01/cam_left_link:
+                  {}
+                H01/cam_right_link:
+                  {}
+                H01/horiz_ouster_sensor:
+                  H01/horiz_ouster_imu:
+                    {}
+                  H01/horiz_ouster_link:
+                    {}
+                H01/imu_link:
+                  {}
+                H01/picoflexx_mount_link:
+                  H01/pico_flexx_left_optical_frame:
+                    {}
+                  H01/pico_flexx_right_optical_frame:
+                    {}
+                H01/vert_ouster_sensor:
+                  {}
+              lidar_link:
+                {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -345,7 +422,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 56.25191879272461
+      Distance: 94.65709686279297
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -353,9 +430,9 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 2.4818992614746094
-        Y: 15.619205474853516
-        Z: -3.4533867835998535
+        X: 16.86384391784668
+        Y: -9.295766830444336
+        Z: -2.1864023208618164
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
@@ -363,7 +440,7 @@ Visualization Manager:
       Near Clip Distance: 0.009999999776482582
       Pitch: 1.5697963237762451
       Target Frame: <Fixed Frame>
-      Yaw: 4.703627109527588
+      Yaw: 3.0636253356933594
     Saved: ~
 Window Geometry:
   Displays:

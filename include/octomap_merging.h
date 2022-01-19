@@ -11,30 +11,12 @@
 #include <rough_octomap/conversions.h>
 
 #include <pcl/common/common.h>
-#include <pcl/common/impl/angles.hpp>
-#include <pcl/registration/icp.h>
 #include <pcl/registration/icp_nl.h>
 #include <pcl/registration/gicp.h>
-#include <pcl/features/normal_3d_omp.h>
-#include <pcl/features/fpfh_omp.h>
-#include <pcl/registration/correspondence_estimation.h>
-#include <pcl/registration/sample_consensus_prerejective.h>
-#include <pcl/registration/ia_ransac.h>
-#include <pcl/registration/transformation_estimation_svd.h>
-
-#include <pcl/surface/organized_fast_mesh.h>
-// #include <pcl/features/from_meshes.h>
-
 #include <pcl/registration/transforms.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl/filters/voxel_grid.h>
-#include <pcl/filters/uniform_sampling.h>
-#include <pcl/registration/correspondence_rejection_median_distance.h>
-#include <pcl/correspondence.h>
-#include <pcl/filters/filter.h>
-#include <pcl/registration/ndt.h>
 #include <pcl/filters/statistical_outlier_removal.h>
-#include <pcl/filters/radius_outlier_removal.h>
 #include <pcl/registration/transformation_validation_euclidean.h>
 #include <pcl_ros/transforms.h>
 
@@ -75,7 +57,7 @@ private:
     void updateNeighborMaps();
     void mergeNeighbors(const ros::TimerEvent& event);
     Eigen::Matrix4f alignMap(const RoughOcTreeT* tree);
-    void mergeMap(const RoughOcTreeT* tree);
+    void mergeMap(RoughOcTreeT* tree);
     void transformMap(RoughOcTreeT* tree, const Eigen::Matrix4f& tf);
     Eigen::Matrix4f getGICPTransform(pointCloud &src, pointCloud& trg);
     double getSign(double x) { if (x < 0) return -1; else return 1; }
@@ -106,8 +88,8 @@ private:
     octomap_merging::OctomapNeighbors neighborDiffs;
 
     RoughOcTreeT* m_octree; // self map
-    RoughOcTreeT* m_merged_tree; 
-    RoughOcTreeT* temp_tree;
+    RoughOcTreeT* m_merged_tree; // combination of self map and maps from other neighbors
+    RoughOcTreeT* temp_tree; // temp tree - for merging purposes
 
     // octomap parameters
     std::string m_mapTopic;

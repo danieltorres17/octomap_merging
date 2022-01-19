@@ -39,13 +39,14 @@
   <param name="src_bbox_PC_topic" value="src_bbox_PC" />
   <!-- Target BBox Intersection Points -->
   <param name="trg_bbox_PC_topic" value="trg_bbox_PC" />
+  
   <!-- Topic containing self Octomap -->
   <!-- <param name="diff_map_in" value="/H01/octomap_binary" /> -->
-  <param name="diff_map_in" value="/Base/neighbors/H01/map" />
-  <!-- <param name="diff_map_in" value="/H01/merged_map" /> -->
+  <!-- <param name="diff_map_in" value="/Base/neighbors/H01/map" /> -->
+  <param name="diff_map_in" value="/H01/merged_map" />
   <!-- Topic containing neighbor maps -->
-  <!-- <param name="neighbor_diffs_in" value="/H01/neighbor_maps" /> -->
-  <param name="neighbor_diffs_in" value="/Base/neighbor_maps" />
+  <param name="neighbor_diffs_in" value="/H01/neighbor_maps" />
+  <!-- <param name="neighbor_diffs_in" value="/Base/neighbor_maps" /> -->
 
   <rosparam command="load" file="$(find octomap_merging)/config/icp_param_config.yaml" />
 

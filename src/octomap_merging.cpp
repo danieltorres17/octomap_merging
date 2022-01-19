@@ -88,7 +88,7 @@ OctomapMerging::OctomapMerging(ros::NodeHandle& nodehandle, ros::NodeHandle& pri
 
   // initialize tf_estimate for each neighbor with identity matrix
   Eigen::Matrix4f tfEst = Eigen::Matrix4f::Identity(); 
-  for (const auto& n : neighbors_list) {
+  for (auto& n : neighbors_list) {
     neighbor_tf[n] = tfEst;
     neighbor_aligned[n] = false;
   }
@@ -406,10 +406,9 @@ Eigen::Matrix4f OctomapMerging::alignMap(const RoughOcTreeT* tree)
   return est_tf;
 }
 
-void OctomapMerging::mergeMap(const RoughOcTreeT* tree)
+void OctomapMerging::mergeMap(RoughOcTreeT* tree)
 {
   // iterate through tree and merge
-  // boost::mutex::scoped_lock lock(m_mtx);
   for (RoughOcTreeT::iterator it = tree->begin(), end = tree->end(); it != end; ++it) {
     octomap::OcTreeKey nodeKey = it.getKey();
     octomap::RoughOcTreeNode* nodeM = m_merged_tree->search(nodeKey);
@@ -443,10 +442,8 @@ void OctomapMerging::mergeMap(const RoughOcTreeT* tree)
         newNode->setRough(it->getRough());
     }
   }
-  // lock.unlock();
 
   if (m_pubMergedMap) {
-    // boost::mutex::scoped_lock lock(m_mtx);
     m_merged_tree->prune();
     octomap_msgs::Octomap merged_map_msg;
     octomap_msgs::binaryMapToMsg(*m_merged_tree, merged_map_msg);
@@ -735,7 +732,6 @@ void OctomapMerging::transformMap(RoughOcTreeT* tree, const Eigen::Matrix4f& tf)
     }
   }
   tree->swapContent(*transformed);
-  // lock.unlock();
   delete transformed;
 }
 
